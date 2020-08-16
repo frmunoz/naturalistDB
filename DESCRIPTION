@@ -4,6 +4,7 @@ Title: Management of naturalist data
 Version: 1.0
 Date: 2020-08-15
 Author: François Munoz
-Maintainer: François Munoz <francois.munoz@hotmail.fr
+Maintainer: François Munoz <francois.munoz@hotmail.fr>
 Description: Creating, updating and publishing a naturalist database (pictures and herbarium)
 License: no license
+Encoding: UTF8
