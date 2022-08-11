@@ -136,21 +136,23 @@ taxocheck.taxref <- function(names, max.distance = 2,
     baseflor <- baseflor[!is.na(baseflor$cd_nom),]
     #if (!("bdtfx" %in% ls(envir = .GlobalEnv))) {
     #  load(bdtfx.bdd) }
-    tab$phytosocio <- sapply(tab$CD_REF, function(x) ifelse(sum(baseflor$cd_nom==x, na.rm=T)==1, baseflor$INDICATION_PHYTOSOCIOLOGIQUE_CARACTERISTIQUE[baseflor$cd_nom==x], NA))
-    tab$catminat <- sapply(tab$CD_REF, function(x) ifelse(sum(baseflor$cd_nom==x, na.rm=T)==1, baseflor$code_CATMINAT[baseflor$cd_nom==x], NA))
-    tab$pollinisation <- sapply(tab$CD_REF, function(x) ifelse(sum(baseflor$cd_nom==x, na.rm=T)==1, baseflor$pollinisation[baseflor$cd_nom==x], NA))
-    tab$fruit <- sapply(tab$CD_REF, function(x) ifelse(sum(baseflor$cd_nom==x, na.rm=T)==1, baseflor$fruit[baseflor$cd_nom==x], NA))
-    ellenberg <- c("Lumière", "Température", "Continentalité", "Humidité_atmosphérique", "Humidité_édaphique",
+    if(min(dim(baseflor))!=0) {
+      tab$phytosocio <- sapply(tab$CD_REF, function(x) ifelse(sum(baseflor$cd_nom==x, na.rm=T)==1, baseflor$INDICATION_PHYTOSOCIOLOGIQUE_CARACTERISTIQUE[baseflor$cd_nom==x], NA))
+      tab$catminat <- sapply(tab$CD_REF, function(x) ifelse(sum(baseflor$cd_nom==x, na.rm=T)==1, baseflor$code_CATMINAT[baseflor$cd_nom==x], NA))
+      tab$pollinisation <- sapply(tab$CD_REF, function(x) ifelse(sum(baseflor$cd_nom==x, na.rm=T)==1, baseflor$pollinisation[baseflor$cd_nom==x], NA))
+      tab$fruit <- sapply(tab$CD_REF, function(x) ifelse(sum(baseflor$cd_nom==x, na.rm=T)==1, baseflor$fruit[baseflor$cd_nom==x], NA))
+      ellenberg <- c("Lumière", "Température", "Continentalité", "Humidité_atmosphérique", "Humidité_édaphique",
                    "Réaction_du_sol_.pH.", "Niveau_trophique", "Salinité", "Texture",
                    "Matière_organique")
-    tab.ellen <- c()
-    for(x in tab$CD_REF) {
-      if(sum(baseflor$cd_nom==x, na.rm=T)==1) {
-        tab.ellen <- rbind(tab.ellen, baseflor[baseflor$cd_nom==x, ellenberg])
-        } else tab.ellen <- rbind(tab.ellen, rep(NA,length(ellenberg)))
+      tab.ellen <- c()
+      for(x in tab$CD_REF) {
+        if(sum(baseflor$cd_nom==x, na.rm=T)==1) {
+          tab.ellen <- rbind(tab.ellen, baseflor[baseflor$cd_nom==x, ellenberg])
+          } else tab.ellen <- rbind(tab.ellen, rep(NA,length(ellenberg)))
+      }
+      colnames(tab.ellen) <- ellenberg  
+      tab <- data.frame(tab, tab.ellen)
     }
-    colnames(tab.ellen) <- ellenberg  
-    tab <- data.frame(tab, tab.ellen)
   }
   
   rownames(tab)<-orig.names
