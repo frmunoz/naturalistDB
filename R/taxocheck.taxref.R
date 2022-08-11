@@ -1,7 +1,7 @@
 taxocheck.taxref <- function(names, max.distance = 2, 
-                             taxref.bdd = "C:/TaxRef13/taxref13.RData", taxref.fld = c("FAMILLE", "CD_NOM", "CD_REF", "NOM_VALIDE", "NOM_VERN"),
+                             taxref.bdd = "taxref.RData", taxref.fld = c("FAMILLE", "CD_NOM", "CD_REF", "NOM_VALIDE", "NOM_VERN"),
                              resolve.infra = F,
-                             baseflor.chk = T, baseflor.bdd = "C:/Baseflor/baseflor.RData", bdtfx.bdd = "C:/Baseflor/bdtfx.Rdata",
+                             baseflor.chk = T, baseflor.bdd = "baseflor.RData", bdtfx.bdd = "bdtfx.Rdata",
                              phylo = F)
 {
   # names = vector of taxa names (genus species, with space separation)
