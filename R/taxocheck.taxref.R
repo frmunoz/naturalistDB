@@ -1,7 +1,7 @@
 taxocheck.taxref <- function(names, max.distance = 2, 
-                             taxref.bdd = "taxref.RData", taxref.fld = c("FAMILLE", "CD_NOM", "CD_REF", "NOM_VALIDE", "NOM_VERN"),
+                             taxref.bdd = "data/taxref.RData", taxref.fld = c("FAMILLE", "CD_NOM", "CD_REF", "NOM_VALIDE", "NOM_VERN"),
                              resolve.infra = F,
-                             baseflor.chk = T, baseflor.bdd = "baseflor.RData", bdtfx.bdd = "bdtfx.Rdata",
+                             baseflor.chk = T, baseflor.bdd = "data/baseflor.RData", bdtfx.bdd = "data/bdtfx.Rdata",
                              phylo = F)
 {
   # names = vector of taxa names (genus species, with space separation)
@@ -29,7 +29,8 @@ taxocheck.taxref <- function(names, max.distance = 2,
   names <- unique(Hmisc::capitalize(gsub("(^\\s+|\\s+$|(?<=\\s)\\s)", "", names, perl=T)))
   orig.names <- names;
   tab<-data.frame(row.names=orig.names,Genus= rep(NA,length(orig.names)), Species= rep(NA,length(orig.names)))
-      
+  tab$Nom.accepte<-NA
+  
   # Detect incomplete names or names with number:
   num<-c()
   for(i in 0:9) {num<-rbind(num, stringr::str_detect(names, as.character(i)))}
@@ -117,7 +118,12 @@ taxocheck.taxref <- function(names, max.distance = 2,
     colnames(tab)[-(1:start)] <- taxref.fld
     tab[sel,(start+1):ncol(tab)] <- data.frame(info[,taxref.fld])
     tab[sel,]$Nom.accepte <- taxref[as.character(info$CD_REF),]$LB_NOM
-  } else {warning("No match in TaxRef database")}
+  } else {
+    warning("No match in TaxRef database")
+    tab <- cbind(tab, array(NA,c(nrow(tab),length(taxref.fld))))
+    colnames(tab)[-(1:start)] <- taxref.fld
+    tab[sel,(start+1):ncol(tab)] <- NA
+  }
      
   ## URL in Tropicos
   tab$URL_Tropicos <- unlist(lapply(tab$ID_Tropicos, function(x) ifelse(!is.na(x),
@@ -163,7 +169,14 @@ taxocheck.taxref <- function(names, max.distance = 2,
   } 
   
   if(!keep) rm(taxref)
-      
+  
+  # DEBUG - The result should include (at least) 10 columns
+  if(ncol(tab)<10) {
+    warning("Number of colums below 10!")
+    print(ncol(tab))
+    tab <- cbind(tab,array(NA,c(nrow(tab),10-ncol(tab))))
+  }    
+  
   if(!phylo)
   {
     # Return a table with original names in Rownames, and information on these taxa in other columns
