@@ -53,6 +53,7 @@ plantnet.id <- function(files, dir=F, rename=T, threshold=90, key="2a10aXzK3Rhet
   if(dir) save(res, file=paste(dir.name,"/",Sys.Date(),"_plantnet.id.RData",sep=""))
   
   if(rename) {
+    # Rename file with PlantNet identification if score is high
     #for(x in files) {
       #if(ncol(res[[x]])==3 & sum(res[[x]][,1]>0.9)==1)
       # file.rename(from=res[[x]], to=paste()))
