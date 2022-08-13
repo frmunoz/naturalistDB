@@ -1,8 +1,7 @@
 \name{copy.images}
 \alias{copy.images}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-%%  ~~function to do ... ~~
+\title{Copy image files from one directory to another
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
